@@ -9,67 +9,117 @@ $app = new \Slim\App;
 
 // all books
 $app->get('/books', function (Request $request, Response $response) {    
-    try {
-        // picking books from database 
-        $usersDb = new BooksDB();    
-        $books = $usersDb->getAll();
+  try {
+    // picking books from database 
+    $booksDb = new BooksDB();
+    $books = $booksDb->getAll();
 
-        // custom json response
-        $response->withStatus(200);
-        $response->withHeader('Content-Type', 'application/json');
-        return $response->withJson($books);
+    // custom json response
+    $response->withStatus(200);
+    $response->withHeader('Content-Type', 'application/json');
+    return $response->withJson($books);
 
-    } catch (PDOException $e) {
-        $response->withStatus(500);
-        $response->withHeader('Content-Type', 'application/json');
-        $error['err'] = $e->getMessage(); 
-        return $response->withJson($error);
-    }
+  } catch (PDOException $e) {
+    $response->withStatus(500);
+    $response->withHeader('Content-Type', 'application/json');
+    $error['err'] = $e->getMessage();
+    return $response->withJson($error);
+  }
 });
 
-// one book by id
-$app->get('/books/{id}', function (Request $request, Response $response) {      try {
-        $id = $request->getAttribute('id');
+// get one book by id
+$app->get('/books/{id}', function (Request $request, Response $response) {
+  try {
+    $id = $request->getAttribute('id');
 
-        // picking book from database 
-        $usersDb = new BooksDB();    
-        $book = $usersDb->findById($id);
+    // add a book 
+    $booksDb = new BooksDB();    
+    $book = $booksDb->findById($id);
 
-        // custom json response
-        $response->withStatus(200);
-        $response->withHeader('Content-Type', 'application/json');
-        return $response->withJson($book);
+    // custom json response
+    $response->withStatus(200);
+    $response->withHeader('Content-Type', 'application/json');
+    return $response->withJson($book);
 
-    } catch (PDOException $e) {
-        $response->withStatus(500);
-        $response->withHeader('Content-Type', 'application/json');
-        $error['err'] = $e->getMessage(); 
-        return $response->withJson($error);
-    }
+  } catch (PDOException $e) {
+    $response->withStatus(500);
+    $response->withHeader('Content-Type', 'application/json');
+    $error['err'] = $e->getMessage(); 
+    return $response->withJson($error);
+  }
 });
-
 
 // adding a book
-$app->get('/books/{id}', function (Request $request, Response $response) {      try {
-        $title = $request->getAttribute('id');
-        $author = $request->getAttribute('author');
-        $description = $request->getAttribute('description');
+$app->post('/books', function (Request $request, Response $response) { 
+  try {
+    $title = $request->getParam('title');
+    $author = $request->getParam('author');
+    $description = $request->getParam('description');
 
-        // picking book from database 
-        $usersDb = new BooksDB();    
-        $book = $usersDb->findById($id);
+    // updating the book in db
+    $booksDb = new BooksDB();
+    $booksDb->add($title, $author, $description);
 
-        // custom json response
-        $response->withStatus(200);
-        $response->withHeader('Content-Type', 'application/json');
-        return $response->withJson($book);
+    // custom json response
+    $response->withStatus(200);
+    $response->withHeader('Content-Type', 'application/json');
+    $message['ok'] = "Book added successfully";
+    return $response->withJson($message);
 
-    } catch (PDOException $e) {
-        $response->withStatus(500);
-        $response->withHeader('Content-Type', 'application/json');
-        $error['err'] = $e->getMessage(); 
-        return $response->withJson($error);
-    }
+  } catch (PDOException $e) {
+    $response->withStatus(500);
+    $response->withHeader('Content-Type', 'application/json');
+    $error['err'] = $e->getMessage(); 
+    return $response->withJson($error);
+  }
+});
+
+// update a book
+$app->put('/books', function (Request $request, Response $response) { 
+  try {
+    $id = $request->getParam('id');
+    $title = $request->getParam('title');
+    $author = $request->getParam('author');
+    $description = $request->getParam('description');
+
+    // picking book from database 
+    $booksDb = new BooksDB();
+    $booksDb->update($id, $title, $author, $description);
+
+    // custom json response
+    $response->withStatus(200);
+    $response->withHeader('Content-Type', 'application/json');
+    $message['ok'] = "Book updated successfully";
+    return $response->withJson($message);
+
+  } catch (PDOException $e) {
+    $response->withStatus(500);
+    $response->withHeader('Content-Type', 'application/json');
+    $error['err'] = $e->getMessage(); 
+    return $response->withJson($error);
+  }
+});
+// delete a book
+$app->delete('/books/{id}', function (Request $request, Response $response) { 
+  try {
+    $id = $request->getAttribute('id');
+    
+    // picking book from database 
+    $booksDb = new BooksDB();
+    $booksDb->delete($id);
+
+    // custom json response
+    $response->withStatus(200);
+    $response->withHeader('Content-Type', 'application/json');
+    $message['ok'] = "Book deleted successfully";
+    return $response->withJson($message);
+
+  } catch (PDOException $e) {
+    $response->withStatus(500);
+    $response->withHeader('Content-Type', 'application/json');
+    $error['err'] = $e->getMessage();
+    return $response->withJson($error);
+  }
 });
 
 $app->run();

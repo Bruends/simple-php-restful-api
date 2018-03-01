@@ -34,5 +34,43 @@
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
-  }
+    public function add(string $title, string $author, string $description){
+      $sql = "INSERT INTO books Values (default, :title, :author, :book_description)";
+      
+      $this->connect();
+
+      $stmt = $this->pdo->prepare($sql);
+
+      $res = $stmt->execute(array(
+         ":title" => $title,
+         ":author" => $author,
+         ":book_description" => $description,
+        )
+      );      
+    }
+   
+    public function update($id, string $title, string $author, string $description){
+      $sql = "UPDATE books SET title = :title, author = :author, book_description = :book_description WHERE id = :id";
+      
+      $this->connect();
+
+      $stmt = $this->pdo->prepare($sql);
+
+      $res = $stmt->execute(array(
+         ":id" => $id,
+         ":title" => $title,
+         ":author" => $author,
+         ":book_description" => $description,
+        )
+      );      
+  }       
+   
+    public function delete($id){
+      $sql = "DELETE FROM books WHERE id= :id";
+
+      $this->connect();
+      
+      $stmt = $this->pdo->prepare($sql);      
+      $res = $stmt->execute(array( ":id" => $id ));      
+  }       
+}
