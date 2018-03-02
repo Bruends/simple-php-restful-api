@@ -33,7 +33,7 @@ $app->get('/books/{id}', function (Request $request, Response $response) {
   try {
     $id = $request->getAttribute('id');
 
-    // add a book 
+    // picking a book
     $booksDb = new BooksDB();    
     $book = $booksDb->findById($id);
 
@@ -58,7 +58,7 @@ $app->post('/books', function (Request $request, Response $response) {
     $book->__set('author', $request->getParam('author'));
     $book->__set('description', $request->getParam('description'));
 
-    // updating the book in db
+    // adding book in db
     $booksDb = new BooksDB();
     $booksDb->add($book);
 
@@ -87,7 +87,7 @@ $app->put('/books', function (Request $request, Response $response) {
     $book->__set('description', $request->getParam('description'));
 
 
-    // picking book from database 
+    // updating book in db
     $booksDb = new BooksDB();
     $booksDb->update($book);
 
@@ -109,7 +109,7 @@ $app->delete('/books/{id}', function (Request $request, Response $response) {
   try {
     $id = $request->getAttribute('id');
     
-    // picking book from database 
+    // delete book from database 
     $booksDb = new BooksDB();
     $booksDb->delete($id);
 
