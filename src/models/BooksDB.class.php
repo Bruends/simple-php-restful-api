@@ -1,13 +1,13 @@
 <?php
-  class BooksDB {
-    private $dbHost = "localhost";
-    private $dbName = "api_books";
-    private $dbUser = "root";
-    private $dbPass = "root";
+require __DIR__ . '/../../configDB.php';
+
+  class BooksDB {    
     private $pdo;
 
     public function connect(){
-      $pdo = new PDO("mysql:host=$this->dbHost;dbname=$this->dbName", $this->dbUser, $this->dbPass);
+      $connect_str = "mysql:host=".DB_HOST.";dbname=".DB_NAME;
+
+      $pdo = new PDO($connect_str, DB_USER, DB_PASSWORD);
 
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

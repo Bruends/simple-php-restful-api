@@ -8,6 +8,7 @@ require 'src/Book.class.php';
 
 $app = new \Slim\App;
 
+// Routes
 // all books
 $app->get('/books', function (Request $request, Response $response) {    
   try {
@@ -56,7 +57,7 @@ $app->post('/books', function (Request $request, Response $response) {
     $book = new Book();    
     $book->__set('title', $request->getParam('title'));
     $book->__set('author', $request->getParam('author'));
-    $book->__set('description', $request->getParam('description'));
+    $book->__set('description', $request->getParam('book_description'));
 
     // adding book in db
     $booksDb = new BooksDB();
@@ -84,7 +85,7 @@ $app->put('/books', function (Request $request, Response $response) {
     $book->__set('id', $request->getParam('id'));
     $book->__set('title', $request->getParam('title'));
     $book->__set('author', $request->getParam('author'));
-    $book->__set('description', $request->getParam('description'));
+    $book->__set('book_description', $request->getParam('description'));
 
 
     // updating book in db
