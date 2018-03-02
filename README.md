@@ -27,7 +27,7 @@ simple CRUD rest api with slim php and mysql
 > GET &nbsp;&nbsp; /books
 
 ##### on book by id:
-> GET &nbsp;&nbsp; /books/<id>
+> GET &nbsp;&nbsp; /books/{id}
 
 ##### add book:
 > POST &nbsp;&nbsp; /books
@@ -57,6 +57,6 @@ and send the body with the json in this format:
 ```
 
 ##### delete book:
-> DELETE &nbsp;&nbsp; /books/<id>
+> DELETE &nbsp;&nbsp; /books/{id}
 
 
