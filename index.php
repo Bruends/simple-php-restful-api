@@ -4,6 +4,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require 'vendor/autoload.php';
 require 'src/models/BooksDB.class.php';
+require 'src/Book.class.php';
 
 $app = new \Slim\App;
 
@@ -52,13 +53,14 @@ $app->get('/books/{id}', function (Request $request, Response $response) {
 // adding a book
 $app->post('/books', function (Request $request, Response $response) { 
   try {
-    $title = $request->getParam('title');
-    $author = $request->getParam('author');
-    $description = $request->getParam('description');
+    $book = new Book();    
+    $book->__set('title', $request->getParam('title'));
+    $book->__set('author', $request->getParam('author'));
+    $book->__set('description', $request->getParam('description'));
 
     // updating the book in db
     $booksDb = new BooksDB();
-    $booksDb->add($title, $author, $description);
+    $booksDb->add($book);
 
     // custom json response
     $response->withStatus(200);
@@ -77,14 +79,17 @@ $app->post('/books', function (Request $request, Response $response) {
 // update a book
 $app->put('/books', function (Request $request, Response $response) { 
   try {
-    $id = $request->getParam('id');
-    $title = $request->getParam('title');
-    $author = $request->getParam('author');
-    $description = $request->getParam('description');
+
+    $book = new Book();
+    $book->__set('id', $request->getParam('id'));
+    $book->__set('title', $request->getParam('title'));
+    $book->__set('author', $request->getParam('author'));
+    $book->__set('description', $request->getParam('description'));
+
 
     // picking book from database 
     $booksDb = new BooksDB();
-    $booksDb->update($id, $title, $author, $description);
+    $booksDb->update($book);
 
     // custom json response
     $response->withStatus(200);

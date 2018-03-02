@@ -15,7 +15,7 @@
     }
 
     public function getAll(){
-      $sql = "SELECT * FROM books";
+      $sql = "SELECT id, title, author, book_description FROM books";
       $this->connect();
 
       $stmt = $this->pdo->query($sql);
@@ -25,7 +25,7 @@
     }
 
     public function findById(int $id){
-      $sql = "SELECT * FROM books WHERE id=$id";
+      $sql = "SELECT id, title, author, book_description FROM books WHERE id=$id";
       $this->connect();
 
       $stmt = $this->pdo->query($sql);
@@ -34,7 +34,7 @@
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function add(string $title, string $author, string $description){
+    public function add(Book $book){
       $sql = "INSERT INTO books Values (default, :title, :author, :book_description)";
       
       $this->connect();
@@ -42,14 +42,14 @@
       $stmt = $this->pdo->prepare($sql);
 
       $res = $stmt->execute(array(
-         ":title" => $title,
-         ":author" => $author,
-         ":book_description" => $description,
+         ":title" => $book->__get('title'),
+         ":author" => $book->__get('author'),
+         ":book_description" => $book->__get('description'),
         )
       );      
     }
    
-    public function update($id, string $title, string $author, string $description){
+    public function update(Book $book){
       $sql = "UPDATE books SET title = :title, author = :author, book_description = :book_description WHERE id = :id";
       
       $this->connect();
@@ -57,10 +57,10 @@
       $stmt = $this->pdo->prepare($sql);
 
       $res = $stmt->execute(array(
-         ":id" => $id,
-         ":title" => $title,
-         ":author" => $author,
-         ":book_description" => $description,
+         ":id" => $book->__get('id'),
+         ":title" => $book->__get('title'),
+         ":author" => $book->__get('author'),
+         ":book_description" => $book->__get('description'),
         )
       );      
   }       
