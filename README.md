@@ -1,6 +1,6 @@
 # Books api
 
-simple books CRUD api with slim php and mysql
+simple CRUD rest api with slim php and mysql
 
 
 ### installing and running:
